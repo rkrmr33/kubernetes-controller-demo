@@ -1,0 +1,20 @@
+domain: example.cats.io
+layout:
+- go.kubebuilder.io/v3
+projectName: kubernetes-controller-demo
+repo: github.com/rkrmr33/kubernetes-controller-demo
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: example.cats.io
+  group: example.cats.io
+  kind: Cat
+  path: github.com/rkrmr33/kubernetes-controller-demo/api/v1alpha1
+  version: v1alpha1
+  webhooks:
+    defaulting: true
+    validation: true
+    webhookVersion: v1
+version: "3"

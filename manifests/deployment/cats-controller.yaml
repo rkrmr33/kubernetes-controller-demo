@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cat-controller
+  labels:
+    control-plane: cat-controller
+spec:
+  selector:
+    matchLabels:
+      control-plane: cat-controller
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        control-plane: cat-controller
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      containers:
+      - command:
+        - /manager
+        args:
+        - --leader-elect
+        image: cat-controller:latest
+        name: manager
+        securityContext:
+          allowPrivilegeEscalation: false
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 100m
+            memory: 30Mi
+          requests:
+            cpu: 100m
+            memory: 20Mi
+        imagePullPolicy: IfNotPresent
+      serviceAccountName: cat-controller
+      terminationGracePeriodSeconds: 10

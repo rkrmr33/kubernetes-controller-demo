@@ -1,0 +1,89 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: cats.example.cats.io
+spec:
+  group: example.cats.io
+  names:
+    kind: Cat
+    listKind: CatList
+    plural: cats
+    singular: cat
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Cat is the Schema for the cats API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: CatSpec defines the desired state of Cat
+            properties:
+              duration:
+                description: Duration the total duration per life. Default is 5s
+                type: string
+              message:
+                description: Message is what the cat would say. Default is "hello,
+                  world!"
+                maxLength: 128
+                type: string
+              totalLives:
+                description: 'TotalLives is the total number of times a cat pod will
+                  be created. Default is: 9'
+                format: int32
+                minimum: 0
+                type: integer
+            type: object
+          status:
+            description: CatStatus defines the observed state of Cat
+            properties:
+              currentLife:
+                description: CurrentLife the current life number
+                format: int32
+                type: integer
+              lastCatPodFinishedTime:
+                description: LastCatPodFinishedTime the time the last cat pod completed
+                format: date-time
+                type: string
+              lastCatPodName:
+                description: LastCatPodName is the name of the last pod that was created
+                  by this cat
+                type: string
+              lastCatPodPhase:
+                description: LastCatPodPhase last pod phase
+                type: string
+              message:
+                description: Message is a description of the current phase
+                type: string
+              phase:
+                description: Phase the current phase of the cat
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
